@@ -2,7 +2,7 @@ package Kwiki::ParagraphBlocks;
 use strict;
 use warnings;
 use Kwiki::Plugin '-Base';
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 const class_id => 'paragraph_blocks';
 const class_title => 'Paragraph Blocks';
@@ -20,9 +20,10 @@ sub to_html {
       Kwiki::Formatter::Paragraph->new($self->hub, $self->block_text);
     $block->parse_phrases;
     my $html = $block->to_html;
+    $html =~ s/.*?<p.*?>\n?(.*)<\/p>.*/$1/s;
     $html =~ s/\n/<br \/>\n/g;
     $html =~ s/^( +)/'&nbsp;' x length($1)/gem;
-    return $html;
+    return "<p>\n$html</p>";
 }
 
 1;
@@ -35,13 +36,13 @@ Kwiki::ParagraphBlocks - Kwiki Paragraph Blocks Plugin
 =head1 SYNOPSIS
 
     .p
-    There once was a man New Yiki,
-    Who took up a penchant for wiki.
+    There once was a man /New Yiki/,
+    Who took up a _penchant for wiki_.
 
       Though he thought it quite slick,
       He wished it were quick.
 
-    er, you see, the man's wiki was Kwiki.
+    er, you see, the man's wiki was *Kwiki*.
     .p
 
 =head1 DESCRIPTION
