@@ -1,8 +1,6 @@
 package Kwiki::ParagraphBlocks;
-use strict;
-use warnings;
-use Kwiki::Plugin '-Base';
-our $VERSION = '0.11';
+use Kwiki::Plugin -Base;
+our $VERSION = '0.12';
 
 const class_id => 'paragraph_blocks';
 const class_title => 'Paragraph Blocks';
@@ -16,8 +14,10 @@ package Kwiki::ParagraphBlocks::Wafl;
 use base 'Spoon::Formatter::WaflBlock';
 
 sub to_html {
-    my $block = 
-      Kwiki::Formatter::Paragraph->new($self->hub, $self->block_text);
+    my $block = Kwiki::Formatter::Paragraph->new(
+        hub => $self->hub, 
+        text => $self->block_text,
+    );
     $block->parse_phrases;
     my $html = $block->to_html;
     $html =~ s/.*?<p.*?>\n?(.*)<\/p>.*/$1/s;
@@ -26,7 +26,6 @@ sub to_html {
     return "<p>\n$html</p>";
 }
 
-1;
 __DATA__
 
 =head1 NAME 
@@ -36,7 +35,7 @@ Kwiki::ParagraphBlocks - Kwiki Paragraph Blocks Plugin
 =head1 SYNOPSIS
 
     .p
-    There once was a man /New Yiki/,
+    There once was a man from /New Yiki/,
     Who took up a _penchant for wiki_.
 
       Though he thought it quite slick,
